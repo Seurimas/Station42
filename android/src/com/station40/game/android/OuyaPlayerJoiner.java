@@ -44,9 +44,6 @@ public class OuyaPlayerJoiner extends Actor {
 			Controller controller = getControllerForPlayer();
 			if (controller != null) {
 				boolean stateChange = controller.getButton(Ouya.BUTTON_O);
-				stateChange |= controller.getButton(Ouya.BUTTON_U);
-				stateChange |= controller.getButton(Ouya.BUTTON_Y);
-				stateChange |= controller.getButton(Ouya.BUTTON_A);
 				if (changingState && !stateChange) {
 					changingState = false; 
 				} else if (!changingState && stateChange) {

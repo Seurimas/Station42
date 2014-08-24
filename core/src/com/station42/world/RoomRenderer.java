@@ -33,12 +33,13 @@ public class RoomRenderer implements EngineRenderer {
 //				Texture region =  entityWorld.getBackground(batch, room.bounds);
 //				batch.draw(region, room.bounds.x, room.bounds.y);
 				TextureRegion region =  entityWorld.getBackground();
-				batch.draw(region, room.bounds.x, room.bounds.y, room.bounds.width, room.bounds.height);
-//				for (int x = 0;x < room.bounds.width;x+=region.getRegionWidth()) {
-//					for (int y = 0;y < room.bounds.width;y+= region.getRegionHeight()) {
-//						batch.draw(region, room.bounds.x + x, room.bounds.y + y);
-//					}
-//				}
+//				batch.draw(region, room.bounds.x, room.bounds.y, room.bounds.width, room.bounds.height);
+				for (int x = 0;x < room.bounds.width;x+=region.getRegionWidth() * 2) {
+					for (int y = 0;y < room.bounds.width;y+= region.getRegionHeight() * 2) {
+						batch.draw(region, room.bounds.x + x, room.bounds.y + y,
+								region.getRegionWidth() * 2, region.getRegionHeight() * 2);
+					}
+				}
 //				if (entityWorld == null)
 //					engine.shapeRenderer.setColor(Color.GRAY);
 //				else

@@ -7,6 +7,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
@@ -54,6 +55,8 @@ import com.station42.input.MouseAndKeyboardController;
 import com.station42.loot.LootDropSystem;
 import com.station42.loot.LootPickupSystem;
 import com.station42.loot.Looter;
+import com.station42.optimizations.RoomResident;
+import com.station42.optimizations.RoomResidentSystem;
 import com.station42.player.PlayerTrackingCameraSystem;
 import com.station42.player.mouse.EntityMouseState;
 import com.station42.player.mouse.PlayerActionStateSetter;
@@ -111,6 +114,7 @@ public class GameScreen implements Screen {
 		engine.addSystem(new HackingActionUpdater());
 		engine.addSystem(new WallCollisionSystem());
 		engine.addSystem(new LootDropSystem());
+		engine.addSystem(new RoomResidentSystem());
 		engine.addSystem(new LootPickupSystem());
 		engine.addSystem(portalRenderer);
 		HackingActionRenderer hackingActionRenderer = new HackingActionRenderer();
@@ -121,6 +125,9 @@ public class GameScreen implements Screen {
 		engine.addMessageListener(matchSystem);
 		engine.addMessageListener(new BulletDamageSystem());
 		setupLevel();
+		Station40Game.mainTheme = Station40Game.manager.get("sounds/main_theme.wav", Music.class);
+		Station40Game.mainTheme.setLooping(true);
+		Station40Game.mainTheme.play();
 		OrthographicCamera mainCamera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
 		mainCamera.lookAt(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
 		cameras.put(fullViewport, mainCamera);
@@ -131,7 +138,6 @@ public class GameScreen implements Screen {
 	}
 
 	private void setupLevel() {
-		Levels.setRoom0();
 		new Levels().setupLevel(engine);
 	}
 
@@ -169,6 +175,7 @@ public class GameScreen implements Screen {
 				new HackingAction(),
 				new HoppingAction(),
 				new Looter(),
+				new RoomResident(),
 				faction,
 				faction.getPlayerSprite(),
 				faction.getStarting());
@@ -180,7 +187,7 @@ public class GameScreen implements Screen {
 			engine.addSystem(new PlayerMoveStateSetter(player, (MouseAndKeyboardController) controller));
 		
 		if (!(controller instanceof MouseAndKeyboardController))
-			engine.addSystem(new PlayerControllerMoveStateSetter(controller, player, Ouya.isRunningOnOuya() ? Ouya.AXIS_LEFT_X : 0, Ouya.isRunningOnOuya() ? Ouya.AXIS_LEFT_Y : 1));
+			engine.addSystem(new PlayerControllerMoveStateSetter(controller, player, Ouya.isRunningOnOuya() ? Ouya.AXIS_LEFT_X : 1, Ouya.isRunningOnOuya() ? Ouya.AXIS_LEFT_Y : 0));
 		else
 			engine.addSystem(new PlayerActionStateSetter(player, (MouseAndKeyboardController) controller));
 //			engine.addSystem(new PlayerMouseStateSetter(camera, player));

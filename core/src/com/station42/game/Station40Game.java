@@ -8,6 +8,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
@@ -33,6 +34,7 @@ public class Station40Game extends Game {
 	public static Station40Game instance;
 	public static AssetManager manager = new AssetManager();
 	static SpriteBatch batch;
+	static Music mainTheme;
 	static MainMenuGetter getter;
 //	public static boolean server;
 	public static OrderedMap<Controller, EntityFaction> playerSelects = new OrderedMap<Controller, EntityFaction>();
@@ -44,7 +46,7 @@ public class Station40Game extends Game {
 	
 	public static Actor getTitleActor() {
 		return new Actor() {
-			TextureRegion region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 0, 80, 128, 24);
+			TextureRegion region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 0, 96, 128, 24);
 			{
 				this.setSize(region.getRegionWidth(), region.getRegionHeight());
 			}
@@ -67,6 +69,9 @@ public class Station40Game extends Game {
 		manager.load("sounds/Laser_Shoot97.wav", Sound.class);
 		manager.load("sounds/Powerup68.wav", Sound.class);
 		manager.load("sounds/Powerup50.wav", Sound.class);
+		manager.load("sounds/Powerup79.wav", Sound.class);
+		manager.load("sounds/main_theme.wav", Music.class);
+		manager.load("sounds/win_tune.wav", Sound.class);
 	}
 
 	public static Texture getSprites() {

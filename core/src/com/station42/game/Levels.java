@@ -19,15 +19,20 @@ public class Levels {
 		Spawning,
 		Looting,
 	};
-	private static final int ROOM_SIZE = 256;
+	private static final int ROOM_SIZE = Room.ROOM_SIZE;
 	private static final int SENTRY_OFFSET = ROOM_SIZE / 4;
 	private static RoomTypes Scoring = RoomTypes.Scoring;
 	private static RoomTypes Danger = RoomTypes.Danger;
 	private static RoomTypes Spawning = RoomTypes.Spawning;
 	private static RoomTypes Looting = RoomTypes.Looting;
-	private static final int GREEN = 0;
-	private static final int ORANGE = 1;
+	private static final int GREEN = World.greenWorld.worldId;
+	private static final int ORANGE = World.orangeWorld.worldId;
 	public static RoomTypes[][][] roomGrid;
+	public static final String[] levelNames = {
+		"Capture Points",
+		"King of the Hill",
+		"Deathmatch"
+	};
 	public static void setRoom0(){ 
 		roomGrid = new RoomTypes[2][][];
 		roomGrid[0] = new RoomTypes[][] {
@@ -41,6 +46,32 @@ public class Levels {
 				new RoomTypes[] {Danger, Danger, Looting, Looting},
 				new RoomTypes[] {Danger, Danger, Scoring, Danger},
 				new RoomTypes[] {Looting, Scoring, Danger, Spawning},
+			};
+	}
+	public static void setRoom1(){ 
+		roomGrid = new RoomTypes[2][][];
+		roomGrid[0] = new RoomTypes[][] {
+				new RoomTypes[] {Spawning, Danger, Looting},
+				new RoomTypes[] {Danger, Scoring, Danger},
+				new RoomTypes[] {Looting, Danger, Danger},
+			};
+		roomGrid[1] = new RoomTypes[][] {
+				new RoomTypes[] {Danger, Danger, Looting},
+				new RoomTypes[] {Danger, null, Danger},
+				new RoomTypes[] {Looting, Danger, Spawning},
+			};
+	}
+	public static void setRoom2(){ 
+		roomGrid = new RoomTypes[2][][];
+		roomGrid[0] = new RoomTypes[][] {
+				new RoomTypes[] {Spawning, Looting, Danger},
+				new RoomTypes[] {Looting, Danger, Looting},
+				new RoomTypes[] {Danger, Looting, Danger},
+			};
+		roomGrid[1] = new RoomTypes[][] {
+				new RoomTypes[] {Spawning, Danger, Looting},
+				new RoomTypes[] {Danger, Looting, Danger},
+				new RoomTypes[] {Looting, Danger, Spawning},
 			};
 	}
 	public void setupLevel(Engine engine) {
@@ -60,7 +91,7 @@ public class Levels {
 		for (int x = 0;x < worldRooms.length;x++) {
 			for (int y = 0;y < worldRooms[x].length;y++) {
 				Entity newRoom = Room.spawn(engine, new Rectangle(x * ROOM_SIZE, y * ROOM_SIZE, ROOM_SIZE, ROOM_SIZE), 
-						getUp(worldRooms, x, y), getRight(worldRooms, x, y), getDown(worldRooms, x, y), getRight(worldRooms, x, y), world);
+						getUp(worldRooms, x, y), getRight(worldRooms, x, y), getDown(worldRooms, x, y), getLeft(worldRooms, x, y), world);
 				if (worldRooms[x][y] == Spawning) {
 					newRoom.setComponent(SpawnRoom.class, new SpawnRoom(world.getHomeFaction()));
 				} else if (worldRooms[x][y] == Danger) {
@@ -89,15 +120,16 @@ public class Levels {
 			}
 		}
 	}
+	private boolean getLeft(RoomTypes[][] worldRooms, int x, int y) {
+		return x == 0;
+	}
 	private boolean getDown(RoomTypes[][] worldRooms, int x, int y) {
-		// TODO Auto-generated method stub
-		return false;
+		return y == 0;
 	}
 	private boolean getRight(RoomTypes[][] worldRooms, int x, int y) {
-		// TODO Auto-generated method stub
-		return false;
+		return x == worldRooms.length - 1;
 	}
 	private boolean getUp(RoomTypes[][] worldRooms, int x, int y) {
-		return false;
+		return y == worldRooms[0].length - 1;
 	}
 }

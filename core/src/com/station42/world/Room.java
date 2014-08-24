@@ -9,6 +9,7 @@ import com.station42.base.Entity;
 import com.station42.optimizations.RoomResident;
 
 public class Room {
+	public static final int ROOM_SIZE = 256;
 	public static Entity spawn(Engine engine, Rectangle bounds, 
 			boolean up, boolean right, boolean down, boolean left, Object... otherComponents) {
 		Room room = new Room(bounds, up, right, down, left);
@@ -23,9 +24,14 @@ public class Room {
 		}
 		return roomEntity;
 	}
-	Rectangle bounds;
+	public Rectangle bounds;
 	ArrayList<Entity> walls = new ArrayList<Entity>();
 	public ArrayList<Entity> residents = new ArrayList<Entity>();
+	public void clearResidents() {
+		for (int i = residents.size() - 1;i >= 0;i--) {
+			removeResident(residents.get(i));
+		}
+	}
 	public void addResident(Entity resident) {
 		residents.add(resident);
 		RoomResident residential = resident.getComponent(RoomResident.class);

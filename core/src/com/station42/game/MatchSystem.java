@@ -121,7 +121,8 @@ public class MatchSystem implements EngineMessageListener, EngineRenderer,
 		if (winner == null) {
 			winner = EntityFaction.getWinner();
 			if (winner != null) {
-				Station40Game.manager.get("sounds/Powerup68.wav", Sound.class).play(0.5f);
+				Station40Game.mainTheme.stop();
+				Station40Game.manager.get("sounds/win_tune.wav", Sound.class).play(0.5f);
 			}
 		}
 	}

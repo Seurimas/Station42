@@ -16,15 +16,17 @@ import com.station42.faction.EntityFaction;
 import com.station42.game.Station40Game;
 
 public class World {
-	public static final World orangeWorld = new World("Orange", Color.ORANGE);
-	public static final World greenWorld = new World("Green", Color.GREEN);
+	public static final World orangeWorld = new World("Orange", Color.ORANGE, 0);
+	public static final World greenWorld = new World("Green", Color.GREEN, 1);
 	Color theme;
 	String name;
 	TextureRegion region;
 	TextureRegion wallRegion;
-	private World(String name, Color theme) {
+	public int worldId;
+	private World(String name, Color theme, int worldId) {
 		this.name = name;
 		this.theme = theme;
+		this.worldId = worldId;
 	}
 	public Color getColor() {
 		return theme;
@@ -61,9 +63,9 @@ public class World {
 	public TextureRegion getBackground() {
 		if (region == null) {
 			if (this == orangeWorld)
-				region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 80, 32, 16, 16);
+				region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 64, 32, 32, 32);
 			else if (this == greenWorld)
-				region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 64, 32, 16, 16);
+				region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 96, 64, 32, 32);
 		}
 		return region;
 	}

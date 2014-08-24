@@ -22,11 +22,15 @@ public class WallRenderer implements EngineRenderer {
 	@Override
 	public void render(Engine engine, SpriteBatch batch, Rectangle viewport) {
 		batch.end();
-		engine.shapeRenderer.begin(ShapeType.Line);
+		engine.shapeRenderer.begin(ShapeType.Filled);
 		for (Entity entity : engine.getEntitiesWithComponent(Wall.class)) {
 			Wall wall = entity.getComponent(Wall.class);
 			World world = entity.getComponent(World.class);
 			Room room = wall.room;
+			float width = Math.abs(wall.end.x - wall.start.x);
+			float height = Math.abs(wall.end.y - wall.start.y);
+			float x = Math.min(wall.start.x, wall.end.x);
+			float y = Math.min(wall.start.y, wall.end.y);
 //			if (world != null) {
 //				TextureRegion wallRegion = world.getWalls();
 //				for (int x = (int) wall.start.x;x <= wall.end.x;x+=wallRegion.getRegionWidth()) {
@@ -37,7 +41,8 @@ public class WallRenderer implements EngineRenderer {
 //			}
 			if (World.visible(player, entity) && CroppingHelper.inView(player.getComponent(EntityLocation.class), room.bounds, viewport)) {
 				engine.shapeRenderer.setColor(Color.BLACK);
-				engine.shapeRenderer.line(wall.start, wall.end);
+				engine.shapeRenderer.rect(x - 2, y - 2, width + 4, height + 4);
+//				engine.shapeRenderer.line(wall.start, wall.end);
 			}
 		}
 		engine.shapeRenderer.end();

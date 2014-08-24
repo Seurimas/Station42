@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
@@ -34,6 +35,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.station42.faction.EntityFaction;
 import com.station42.game.Station40Game.MainMenuGetter;
 import com.station42.input.MouseAndKeyboardController;
+import com.sun.xml.internal.ws.api.pipe.NextAction;
 
 public class MainMenuScreen implements Screen {
 	public static MainMenuGetter getter = new MainMenuGetter() {
@@ -58,8 +60,47 @@ public class MainMenuScreen implements Screen {
 		addPlayerRow(table, 1);
 		addPlayerRow(table, 2);
 		addPlayerRow(table, 3);
+		TextField pointsField = new TextField("Points (Default 50)", skin);
+		pointsField.setTextFieldListener(new TextField.TextFieldListener() {
+			
+			@Override
+			public void keyTyped(TextField textField, char c) {
+				try {
+					Integer points = Integer.parseInt(textField.getText());
+					EntityFaction.clearScores(points);
+				} catch (NumberFormatException nfe) {
+					EntityFaction.clearScores();
+				}
+		
+			}
+		});
+		table.add(pointsField).colspan(2).row();
+		SelectBox<String> levelSelection = new SelectBox<String>(skin);
+		levelSelection.setItems(Levels.levelNames);
+		levelSelection.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				SelectBox<String> selectionBox = (SelectBox<String>)actor;
+				String value = selectionBox.getSelected();
+				checkLevel(value);
+			}
+		});
+		checkLevel(Levels.levelNames[0]);
+		table.add(levelSelection).colspan(2).row();
 		addPlayButton(table);
 		stage.addActor(table);
+	}
+
+	private void checkLevel(String value) {
+		if (value != null) {
+			if (value == Levels.levelNames[0])
+				Levels.setRoom0();
+			else if (value == Levels.levelNames[1])
+				Levels.setRoom1();
+			else if (value == Levels.levelNames[2])
+				Levels.setRoom2();
+		}
 	}
 	private void addPlayButton(Table table2) {
 		TextButton playButton = new TextButton("Play!", skin);

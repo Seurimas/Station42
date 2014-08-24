@@ -23,7 +23,7 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new Station40Game(OuyaMenuScreen.getter), config);
-		System.out.println(Gdx.files.getLocalStoragePath());
-		Debug.startMethodTracing(Gdx.files.getLocalStoragePath() + "trace.trace");
+//		System.out.println(Gdx.files.getLocalStoragePath());
+//		Debug.startMethodTracing(Gdx.files.getLocalStoragePath() + "trace.trace");
 	}
 }

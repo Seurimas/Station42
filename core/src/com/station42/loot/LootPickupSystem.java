@@ -1,11 +1,13 @@
 package com.station42.loot;
 
+import com.badlogic.gdx.audio.Sound;
 import com.station42.base.Engine;
 import com.station42.base.EngineUpdateListener;
 import com.station42.base.Entity;
 import com.station42.basic.EntityLocation;
 import com.station42.faction.EntityFaction;
 import com.station42.game.ScoringPortal;
+import com.station42.game.Station40Game;
 import com.station42.optimizations.RoomResident;
 import com.station42.world.World;
 
@@ -42,6 +44,7 @@ public class LootPickupSystem implements EngineUpdateListener {
 				EntityLocation looterLocation = looter.getComponent(EntityLocation.class);
 				if (World.visible(looter, lootDrop) && looterLocation.collides(lootLocation)) {
 					engine.despawnEntity(lootDrop);
+					Station40Game.manager.get("sounds/Powerup79.wav", Sound.class).play(0.5f);
 					((Loot)lootDrop.getComponent(componentClass)).onLoot(engine, looter);
 				}
 			}

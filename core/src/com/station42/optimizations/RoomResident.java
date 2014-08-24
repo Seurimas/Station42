@@ -34,13 +34,11 @@ public class RoomResident {
 						throw new RuntimeException("UNIMPLEMENTED FOREACHREMAINING");
 					}
 					private void shiftToNextPossible() {
-						while (base == null || !base.hasNext()) {
-							while (roomsIterator.hasNext()) {
-								Room possibleRoom = roomsIterator.next();
-								if (possibleRoom.residents.size() != 0) {
-									base = possibleRoom.residents.iterator();
-									break;
-								}
+						while ((base == null || !base.hasNext()) && roomsIterator.hasNext()) {
+							Room possibleRoom = roomsIterator.next();
+							if (possibleRoom.residents.size() != 0) {
+								base = possibleRoom.residents.iterator();
+								break;
 							}
 						}
 						if (base != null && base.hasNext())
@@ -53,8 +51,10 @@ public class RoomResident {
 						while (nextPossible != null) {
 							if (nextPossible.getComponent(component) != null) {
 								next = nextPossible;
+								nextPossible = null;
 								break;
 							}
+							nextPossible = null;
 							shiftToNextPossible();
 						}
 					}

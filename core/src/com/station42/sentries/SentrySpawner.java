@@ -10,11 +10,13 @@ import com.station42.basic.EntitySprite;
 import com.station42.faction.EntityFaction;
 import com.station42.game.Station40Game;
 import com.station42.hacking.Hackable;
+import com.station42.optimizations.RoomResident;
 
 public final class SentrySpawner {
 	public static Entity spawnSentry(Engine engine, float x, float y, EntityFaction team) {
 		Entity sentry = new Entity("Sentry",
 				new Sentry(0.25f),
+				new RoomResident(),
 				new EntityFacing(),
 				new Hackable("Turncoat", 80, 1f),
 				new EntityLocation(x - 16, y - 16, 32), 
