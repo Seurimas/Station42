@@ -9,6 +9,7 @@ import com.station42.basic.EntityLocation;
 import com.station42.bullet.BulletSpawner;
 import com.station42.faction.EntityFaction;
 import com.station42.game.ScoringPortal;
+import com.station42.optimizations.RoomResident;
 import com.station42.world.World;
 
 public class FactionSentrySystem implements EngineUpdateListener {
@@ -45,7 +46,12 @@ public class FactionSentrySystem implements EngineUpdateListener {
 //		Entity nearestTarget = null;
 		Vector2 nearestTarget = null;
 		float distanceToNearest = sentry.trackingDistance;
-		for (Entity possibleTarget : engine.getEntitiesWithComponent(EntityFaction.class)) {
+		Iterable<Entity> possibleTargets;
+		if (sentryEntity.getComponent(RoomResident.class) != null)
+			possibleTargets = sentryEntity.getComponent(RoomResident.class).getNeighboringResidentsWithComponent(EntityFaction.class);
+		else
+			possibleTargets = engine.getEntitiesWithComponent(EntityFaction.class);
+		for (Entity possibleTarget : possibleTargets) {
 			if (sentryEntity == possibleTarget || possibleTarget.getComponent(Sentry.class) != null || possibleTarget.getComponent(ScoringPortal.class) != null)
 				continue;
 			EntityFaction targetFaction = possibleTarget.getComponent(EntityFaction.class);

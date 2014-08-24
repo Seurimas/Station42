@@ -3,6 +3,7 @@ package com.station42.hacking;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
@@ -35,15 +36,16 @@ public class HackingUI implements EngineRenderer {
 					batch.draw(sprite.getRegion(), newLocation.x, newLocation.y);
 				}
 				if (hackable != null) {
+					TextBounds bounds = font.getBounds(hackable.description);
 					newLocation.set(-1, -1 + (32f / viewport.height), 0);
 					newLocation.mul(engine.inverted);
 					font.draw(batch, hackable.description, newLocation.x, newLocation.y);
 					batch.end();
-					newLocation.set(-1 + (32f / viewport.width), -1 + (64f / viewport.height), 0);
+					newLocation.set(-1 + (64f / viewport.width), -1 + (64f / viewport.height), 0);
 					newLocation.mul(engine.inverted);
 					engine.shapeRenderer.begin(ShapeType.Filled);
 					engine.shapeRenderer.setColor(Color.WHITE);
-					engine.shapeRenderer.rect(newLocation.x, newLocation.y, viewport.width / 2 * hackingAction.getCompletionPercent(), 24);
+					engine.shapeRenderer.rect(newLocation.x, newLocation.y - bounds.height, viewport.width / 2 * hackingAction.getCompletionPercent(), 24);
 					engine.shapeRenderer.end();
 					batch.begin();
 				}

@@ -7,6 +7,7 @@ import com.station42.base.Entity;
 import com.station42.basic.EntityFacing;
 import com.station42.basic.EntityLocation;
 import com.station42.faction.EntityFaction;
+import com.station42.loot.SpeedBoost;
 
 public class PlayerWalker implements EngineUpdateListener {
 	Entity centeredEntity;
@@ -17,8 +18,16 @@ public class PlayerWalker implements EngineUpdateListener {
 	public void update(Engine engine, float delta) {
 		EntityLocation aabb = centeredEntity.getComponent(EntityLocation.class);
 		EntityMoveState moveState = centeredEntity.getComponent(EntityMoveState.class);
+		int speed = 100;
+		if (centeredEntity.getComponent(SpeedBoost.class) != null) {
+			speed *= 2;
+			centeredEntity.getComponent(SpeedBoost.class).duration -= delta;
+			if (centeredEntity.getComponent(SpeedBoost.class).duration <= 0) {
+				centeredEntity.setComponent(SpeedBoost.class, null);
+			}
+		}
 		if (aabb != null && moveState != null) {
-			aabb.applyVelocity(moveState.getHorizontal() * 2, moveState.getVertical() * 2);
+			aabb.applyVelocity(moveState.getHorizontal() * speed * delta, moveState.getVertical() * speed * delta);
 			EntityFacing facing = centeredEntity.getComponent(EntityFacing.class);
 			if (facing != null) {
 				double radians = Math.atan2(moveState.getVertical(), moveState.getHorizontal());

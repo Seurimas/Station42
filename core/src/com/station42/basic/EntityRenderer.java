@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.station42.base.Engine;
 import com.station42.base.EngineRenderer;
 import com.station42.base.Entity;
+import com.station42.optimizations.CroppingHelper;
 import com.station42.world.World;
 
 public class EntityRenderer implements EngineRenderer {
@@ -15,9 +16,10 @@ public class EntityRenderer implements EngineRenderer {
 
 	@Override
 	public void render(Engine engine, SpriteBatch batch, Rectangle viewport) {
+		EntityLocation viewer = player.getComponent(EntityLocation.class);
 		for (Entity entity : engine.getEntitiesWithComponent(EntitySprite.class)) {
 			EntityLocation location = entity.getComponent(EntityLocation.class);
-			if (location != null && World.visible(player, entity)) {
+			if (location != null && World.visible(player, entity) && CroppingHelper.inView(viewer, location.getBox(), viewport)) {
 				EntitySprite sprite = entity.getComponent(EntitySprite.class);
 				EntityFacing facing = entity.getComponent(EntityFacing.class);
 				if (facing == null)

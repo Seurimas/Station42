@@ -38,7 +38,7 @@ public class PlayerControllerMouseStateSetter implements EngineUpdateListener {
 			EntityLocation location = centeredEntity.getComponent(EntityLocation.class);
 			float baseX = controller.getAxis(horizontalCode);
 			float baseY = -controller.getAxis(verticalCode);
-			System.out.println(baseX + "," + baseY);
+//			System.out.println(baseX + "," + baseY);
 //			System.out.println(baseX + "," + baseY);
 			if (baseX * baseX + baseY * baseY > 0.1f) {
 				mouseState.setX(location.getCenterX() + baseX * 128);

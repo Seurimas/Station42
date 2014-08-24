@@ -24,10 +24,14 @@ public class Engine {
 		this.batch = batch;
 		this.shapeRenderer = shapeRenderer;
 	}
+	HashMap<Class<?>, ArrayList<Entity>> cachedQueries = new HashMap<Class<?>, ArrayList<Entity>>();
 	ArrayList<Entity> entities = new ArrayList<Entity>();
 	public Iterable<Entity> getEntitiesWithComponent(final Class<?> component) {
+		if (cachedQueries.containsKey(component)) {
+			return cachedQueries.get(component);
+		}
 		return new Iterable<Entity>() {
-
+			ArrayList<Entity> foundEntities = new ArrayList<Entity>();
 			@Override
 			public void forEach(Consumer<? super Entity> arg0) {
 				throw new RuntimeException("UNIMPLEMENTED FOREACH");
@@ -56,6 +60,11 @@ public class Engine {
 					@Override
 					public boolean hasNext() {
 						shiftToNext();
+						if (next == null) {
+							cachedQueries.put(component, foundEntities);
+						} else {
+							foundEntities.add(next);
+						}
 						return next != null;
 					}
 
@@ -93,6 +102,7 @@ public class Engine {
 		spawnedEntities.clear();
 		entities.removeAll(despawnedEntities);
 		despawnedEntities.clear();
+		cachedQueries.clear();
 	}
 	ArrayList<Message> messages = new ArrayList<Message>();
 	public void handleMessage(Message message) {
@@ -117,8 +127,8 @@ public class Engine {
 	public void update(float delta) {
 		for (EngineUpdateListener system : systems) {
 			system.update(this, delta);
-			flushEntities();
 		}
+		flushEntities();
 	}
 	public void render(SpriteBatch batch, OrthographicCamera mainCamera, Rectangle viewport) {
 		batch.setProjectionMatrix(mainCamera.combined);

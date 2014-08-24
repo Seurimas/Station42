@@ -16,8 +16,8 @@ public class EntityMouseState {
 		mouseStates[0] = buttonPressed;
 	}
 	public void setRightDown(boolean buttonPressed) {
-		if (mouseStates[1])
-			System.out.println("DOWN!");
+//		if (mouseStates[1])
+//			System.out.println("DOWN!");
 		mouseStates[1] = buttonPressed;
 	}
 	public boolean isLeftDown() {

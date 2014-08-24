@@ -9,6 +9,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,9 +30,6 @@ import com.station42.basic.EntityFacing;
 import com.station42.basic.EntityLocation;
 import com.station42.basic.EntityRenderer;
 import com.station42.basic.EntitySprite;
-import com.station42.basic.Wall;
-import com.station42.basic.WallCollisionSystem;
-import com.station42.basic.WallRenderer;
 import com.station42.bullet.BulletCollisionSystem;
 import com.station42.bullet.BulletRenderer;
 import com.station42.bullet.BulletUpdateSystem;
@@ -53,6 +51,9 @@ import com.station42.hopping.HoppingUI;
 import com.station42.hopping.OffensiveHackingSystem;
 import com.station42.hopping.PlayerHopper;
 import com.station42.input.MouseAndKeyboardController;
+import com.station42.loot.LootDropSystem;
+import com.station42.loot.LootPickupSystem;
+import com.station42.loot.Looter;
 import com.station42.player.PlayerTrackingCameraSystem;
 import com.station42.player.mouse.EntityMouseState;
 import com.station42.player.mouse.PlayerActionStateSetter;
@@ -69,6 +70,9 @@ import com.station42.sentries.SentryHackingSystem;
 import com.station42.sentries.SentrySpawner;
 import com.station42.world.Room;
 import com.station42.world.RoomRenderer;
+import com.station42.world.Wall;
+import com.station42.world.WallCollisionSystem;
+import com.station42.world.WallRenderer;
 import com.station42.world.WorldUI;
 
 public class GameScreen implements Screen {
@@ -106,6 +110,8 @@ public class GameScreen implements Screen {
 		engine.addSystem(new ScoringPortalHackingSystem());
 		engine.addSystem(new HackingActionUpdater());
 		engine.addSystem(new WallCollisionSystem());
+		engine.addSystem(new LootDropSystem());
+		engine.addSystem(new LootPickupSystem());
 		engine.addSystem(portalRenderer);
 		HackingActionRenderer hackingActionRenderer = new HackingActionRenderer();
 		matchSystem = new MatchSystem(new BitmapFont());
@@ -162,17 +168,19 @@ public class GameScreen implements Screen {
 				new Health(5),
 				new HackingAction(),
 				new HoppingAction(),
+				new Looter(),
 				faction,
 				faction.getPlayerSprite(),
 				faction.getStarting());
 		engine.addRenderer(viewport, new RoomRenderer(player));
 		if (!(controller instanceof MouseAndKeyboardController))
-			engine.addSystem(new PlayerControllerMouseStateSetter(controller, player, 3, 2, 5, 4));
+			engine.addSystem(new PlayerControllerMouseStateSetter(controller, player, 
+					4, 3, Ouya.isRunningOnOuya() ? Ouya.BUTTON_O : 5, Ouya.isRunningOnOuya() ? Ouya.BUTTON_A : 6));
 		else
 			engine.addSystem(new PlayerMoveStateSetter(player, (MouseAndKeyboardController) controller));
 		
 		if (!(controller instanceof MouseAndKeyboardController))
-			engine.addSystem(new PlayerControllerMoveStateSetter(controller, player, 1, 0));
+			engine.addSystem(new PlayerControllerMoveStateSetter(controller, player, Ouya.isRunningOnOuya() ? Ouya.AXIS_LEFT_X : 0, Ouya.isRunningOnOuya() ? Ouya.AXIS_LEFT_Y : 1));
 		else
 			engine.addSystem(new PlayerActionStateSetter(player, (MouseAndKeyboardController) controller));
 //			engine.addSystem(new PlayerMouseStateSetter(camera, player));
@@ -205,7 +213,10 @@ public class GameScreen implements Screen {
 		for (Rectangle splitScreen : cameras.keys()) {
 			Rectangle viewport = splitScreen;
 			if (viewport.getHeight() != 0) {
-				Gdx.gl.glViewport((int)viewport.x, (int)viewport.y, (int)viewport.width, (int)viewport.height);
+				Gdx.gl.glViewport((int)(viewport.x / SCREEN_WIDTH * Gdx.graphics.getWidth()), 
+						(int)(viewport.y / SCREEN_HEIGHT * Gdx.graphics.getHeight()), 
+						(int)(viewport.width / SCREEN_WIDTH * Gdx.graphics.getWidth()),
+						(int)(viewport.height / SCREEN_HEIGHT * Gdx.graphics.getHeight()));
 				engine.render(batch, cameras.get(splitScreen), viewport);
 			}
 		}

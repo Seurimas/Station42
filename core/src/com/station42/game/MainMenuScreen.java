@@ -32,9 +32,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.station42.faction.EntityFaction;
+import com.station42.game.Station40Game.MainMenuGetter;
 import com.station42.input.MouseAndKeyboardController;
 
 public class MainMenuScreen implements Screen {
+	public static MainMenuGetter getter = new MainMenuGetter() {
+		
+		@Override
+		public Screen getScreen(SpriteBatch batch) {
+			return new MainMenuScreen(batch);
+		}
+	};
 	Stage stage;
 	Table table;
 	private Skin skin;
@@ -44,15 +52,7 @@ public class MainMenuScreen implements Screen {
 		setupSkin();
 		table = new Table();
 		table.setFillParent(true);
-		table.add(new Actor() {
-			TextureRegion region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 0, 80, 128, 24);
-			{
-				this.setSize(region.getRegionWidth(), region.getRegionHeight());
-			}
-			public void draw(Batch batch, float parentAlpha) {
-				batch.draw(region, this.getCenterX() - region.getRegionWidth() / 2, this.getCenterY() - region.getRegionHeight() / 2);
-			}
-		}).fill().colspan(2).row();
+		table.add(Station40Game.getTitleActor()).fill().colspan(2).row();
 		playerSelects = new OrderedMap<Button, SelectBox<Controller>>();
 		addPlayerRow(table, 0);
 		addPlayerRow(table, 1);

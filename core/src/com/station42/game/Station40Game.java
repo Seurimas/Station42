@@ -13,8 +13,11 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -24,14 +27,31 @@ import com.station42.faction.EntityFaction;
 import com.station42.input.MouseAndKeyboardController;
 
 public class Station40Game extends Game {
+	public static interface MainMenuGetter {
+		public Screen getScreen(SpriteBatch batch);
+	}
 	public static Station40Game instance;
 	public static AssetManager manager = new AssetManager();
 	static SpriteBatch batch;
+	static MainMenuGetter getter;
 //	public static boolean server;
-	static OrderedMap<Controller, EntityFaction> playerSelects = new OrderedMap<Controller, EntityFaction>();
-	public Station40Game() {
+	public static OrderedMap<Controller, EntityFaction> playerSelects = new OrderedMap<Controller, EntityFaction>();
+	public Station40Game(MainMenuGetter getter) {
 //		Station40Game.server = server;
 		instance = this;
+		Station40Game.getter = getter;
+	}
+	
+	public static Actor getTitleActor() {
+		return new Actor() {
+			TextureRegion region = new TextureRegion(Station40Game.manager.get("sprites.png", Texture.class), 0, 80, 128, 24);
+			{
+				this.setSize(region.getRegionWidth(), region.getRegionHeight());
+			}
+			public void draw(Batch batch, float parentAlpha) {
+				batch.draw(region, this.getCenterX() - region.getRegionWidth() / 2, this.getCenterY() - region.getRegionHeight() / 2);
+			}
+		};
 	}
 
 	@Override
@@ -66,19 +86,19 @@ public class Station40Game extends Game {
 			if (this.getScreen() != null)
 				this.getScreen().render(Gdx.graphics.getDeltaTime());
 		} else {
-			System.out.println(manager.getProgress());
+//			System.out.println(manager.getProgress());
 		}
 	}
 	public static void startGame() {
 		instance.setScreen(new GameScreen(batch, playerSelects));
 	}
 	public static void mainMenu() {
-		instance.setScreen(new MainMenuScreen(batch));
+		instance.setScreen(getter.getScreen(batch));
 	}
 
 	public static void addPlayer(EntityFaction entityFaction,
 			Controller selected) {
-		if (selected != MouseAndKeyboardController.None)
+		if (selected != MouseAndKeyboardController.None && selected != null)
 			playerSelects.put(selected, entityFaction);
 	}
 }

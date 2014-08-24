@@ -30,4 +30,7 @@ public class Health {
 		}
 		return currentHealth >= maxHealth;
 	}
+	public void boost(int i) {
+		currentHealth += i;
+	}
 }

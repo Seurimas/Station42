@@ -58,7 +58,7 @@ public class MatchSystem implements EngineMessageListener, EngineRenderer,
 				EntityFaction.blue.losePoints(redLead);
 			else if (redLead < 0)
 				EntityFaction.red.losePoints(-redLead);
-			
+			checkScore();
 		}
 	}
 

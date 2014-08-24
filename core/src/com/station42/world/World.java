@@ -1,8 +1,16 @@
 package com.station42.world;
 
+import java.util.HashMap;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Rectangle;
 import com.station42.base.Entity;
 import com.station42.faction.EntityFaction;
 import com.station42.game.Station40Game;
@@ -65,5 +73,26 @@ public class World {
 		else if (this == greenWorld)
 			return EntityFaction.blue;
 		return null;
+	}
+	HashMap<Rectangle, Texture> optimizedRegions = new HashMap<Rectangle, Texture>();
+	public Texture getBackground(SpriteBatch batch, Rectangle bounds) {
+		Rectangle normalBounds = new Rectangle(bounds).setPosition(0, 0);
+		if (!optimizedRegions.containsKey(bounds))
+		{
+			TextureRegion tileRegion = getBackground();
+			tileRegion.getTexture().getTextureData().prepare();
+			Texture newTexture = new Texture((int)bounds.x, (int)bounds.y, tileRegion.getTexture().getTextureData().getFormat());
+			Pixmap newPixmap = newTexture.getTextureData().consumePixmap();
+			Pixmap tilePixmap = tileRegion.getTexture().getTextureData().consumePixmap();
+			for (int x = 0;x < bounds.width;x+=tileRegion.getRegionWidth()) {
+				for (int y = 0;y < bounds.width;y+= tileRegion.getRegionHeight()) {
+					newPixmap.drawPixmap(tilePixmap, x, y,
+							tileRegion.getRegionX(), tileRegion.getRegionY(), 
+							tileRegion.getRegionWidth(), tileRegion.getRegionHeight());
+				}
+			}
+			optimizedRegions.put(normalBounds, newTexture);
+		}
+		return optimizedRegions.get(normalBounds);
 	}
 }

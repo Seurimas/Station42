@@ -4,8 +4,8 @@ import com.station42.base.Engine;
 import com.station42.base.EngineUpdateListener;
 import com.station42.base.Entity;
 import com.station42.basic.EntityLocation;
-import com.station42.basic.Wall;
 import com.station42.death.BulletDamageMessage;
+import com.station42.world.Wall;
 import com.station42.world.World;
 
 public class BulletCollisionSystem implements EngineUpdateListener {
@@ -37,7 +37,7 @@ public class BulletCollisionSystem implements EngineUpdateListener {
 				}
 			}
 			if (nearestTarget != null) {
-				System.out.println(nearestTarget.name + " HIT!");
+//				System.out.println(nearestTarget.name + " HIT!");
 				engine.despawnEntity(bulletEntity);
 				engine.handleMessage(new BulletDamageMessage(bullet.getShooter(), nearestTarget, null));
 			}

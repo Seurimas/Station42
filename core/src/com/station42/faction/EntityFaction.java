@@ -72,4 +72,7 @@ public class EntityFaction {
 		// TODO Auto-generated method stub
 		return score;
 	}
+	public void gainPoints(int i) {
+		score += i;
+	}
 }

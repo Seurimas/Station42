@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.station42.base.Engine;
 import com.station42.base.Entity;
-import com.station42.basic.Wall;
+import com.station42.optimizations.RoomResident;
 
 public class Room {
 	public static Entity spawn(Engine engine, Rectangle bounds, 
@@ -25,6 +25,21 @@ public class Room {
 	}
 	Rectangle bounds;
 	ArrayList<Entity> walls = new ArrayList<Entity>();
+	public ArrayList<Entity> residents = new ArrayList<Entity>();
+	public void addResident(Entity resident) {
+		residents.add(resident);
+		RoomResident residential = resident.getComponent(RoomResident.class);
+		if (residential != null) {
+			residential.addRoom(this);
+		}
+	}
+	public void removeResident(Entity resident) {
+		residents.remove(resident);
+		RoomResident residential = resident.getComponent(RoomResident.class);
+		if (residential != null) {
+			residential.removeRoom(this);
+		}
+	}
 	public Room(Rectangle bounds, boolean upClosed, boolean rightClosed, boolean bottomClosed, boolean leftClosed) {
 		this.bounds = bounds;
 		addWall(bounds, 
@@ -85,14 +100,14 @@ public class Room {
 			throw new RuntimeException("BAD VALUE");
 		}
 		if (closed) {
-			walls.add(new Entity("Room wall", new Wall(new Vector2(x0, y0), 
+			walls.add(new Entity("Room wall", new Wall(this, new Vector2(x0, y0), 
 					new Vector2(x1, y1),
 					in)));
 		} else {
-			walls.add(new Entity("Room wall", new Wall(new Vector2(x0, y0), 
+			walls.add(new Entity("Room wall", new Wall(this, new Vector2(x0, y0), 
 					new Vector2((x0 + x1) / 2 - xMod, (y0 + y1) / 2 - yMod),
 					in)));
-			walls.add(new Entity("Room wall", new Wall(new Vector2((x0 + x1) / 2 + xMod, (y0 + y1) / 2 + yMod),
+			walls.add(new Entity("Room wall", new Wall(this, new Vector2((x0 + x1) / 2 + xMod, (y0 + y1) / 2 + yMod),
 					new Vector2(x1, y1),
 					in)));
 		}

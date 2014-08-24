@@ -18,13 +18,13 @@ public class HoppingAction {
 		return wantHacking;
 	}
 	public float getCompletionPercent() {
-		if (wantHacking) {
+//		if (wantHacking) {
 			float timeNeeded = duration;
 			float timeSpent = hackingTime;
 			return Math.min(timeSpent / timeNeeded, 1);
-		} else {
-			return 0;
-		}
+//		} else {
+//			return 0;
+//		}
 	}
 	public void update(float delta) {
 		hackingTime += delta;
@@ -37,5 +37,8 @@ public class HoppingAction {
 	}
 	public void reset() {
 		hackingTime = 0;
+	}
+	public void boost(int i) {
+		hackingTime += i;
 	}
 }

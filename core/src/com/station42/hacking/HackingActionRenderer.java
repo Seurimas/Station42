@@ -25,16 +25,16 @@ public class HackingActionRenderer implements EngineRenderer, EngineUpdateListen
 				if (particles == null) {
 					particles = new HackingActionParticles(entity, entity.getComponent(EntityFaction.class).getHackingEffect());
 					particles.begin();
-					System.out.println("Beginning new!");
+//					System.out.println("Beginning new!");
 					entity.setComponent(HackingActionParticles.class, particles);
 				} else if (!particles.alive() && hackingAction.getHackingWanted()) {
 					particles.begin();
-					System.out.println("Beginning old!");
+//					System.out.println("Beginning old!");
 				}
 			} else {
 				if (particles != null && particles.alive()) {
 					particles.die();
-					System.out.println("Killing old!");
+//					System.out.println("Killing old!");
 				}
 			}
 		}

@@ -44,9 +44,15 @@ public class EntityLocation {
 	public float getDistance(EntityLocation otherEntity) {
 		return centerLocation.dst(otherEntity.centerLocation);
 	}
+	public boolean collides(EntityLocation otherEntity) {
+		return aabb.overlaps(otherEntity.aabb);
+	}
 	public void setCenter(int x, int y) {
 		centerLocation.set(x, y);
 		aabb.x = x - aabb.width / 2;
 		aabb.y = y - aabb.height / 2;
+	}
+	public Rectangle getBox() {
+		return aabb;
 	}
 }

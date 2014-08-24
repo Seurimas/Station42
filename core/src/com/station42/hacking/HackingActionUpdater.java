@@ -6,13 +6,18 @@ import com.station42.base.Entity;
 import com.station42.basic.EntityLocation;
 
 public class HackingActionUpdater implements EngineUpdateListener{
+	private float interval = 0.25f;
+	private float sinceLast = 1f;
 	@Override
 	public void update(Engine engine, float delta) {
 		for (Entity entity : engine.getEntitiesWithComponent(HackingAction.class)) {
 			EntityLocation hackerLocation = entity.getComponent(EntityLocation.class);
 			HackingAction hackingAction = entity.getComponent(HackingAction.class);
-			if (hackingAction != null) {
-				hackingAction.calculateEntitiesInRange(engine, hackerLocation);
+			sinceLast += delta;
+			if (sinceLast > interval) {
+				if (hackingAction != null) {
+					hackingAction.calculateEntitiesInRange(engine, hackerLocation);
+				}
 			}
 			Entity target = hackingAction.getTarget();
 			if (target != null) {

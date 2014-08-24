@@ -4,11 +4,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.station42.base.Engine;
 import com.station42.base.Entity;
-import com.station42.basic.Wall;
 import com.station42.death.SpawnRoom;
 import com.station42.faction.EntityFaction;
+import com.station42.loot.LootDrop;
 import com.station42.sentries.SentrySpawner;
 import com.station42.world.Room;
+import com.station42.world.Wall;
 import com.station42.world.World;
 
 public class Levels {
@@ -82,6 +83,8 @@ public class Levels {
 					float centerX = newRoom.getComponent(Room.class).getCenterX();
 					float centerY = newRoom.getComponent(Room.class).getCenterY();
 					ScoringPortal.spawnPortal(engine, centerX, centerY, world);
+				} else if (worldRooms[x][y] == Looting) {
+					newRoom.setComponent(LootDrop.class, new LootDrop(5, 5));
 				}
 			}
 		}
