@@ -21,8 +21,9 @@ public class WorldUI implements EngineRenderer {
 	}
 	@Override
 	public void render(Engine engine, SpriteBatch batch, Rectangle viewport) {
+		float ouyaBorder = 0.05f;
 		Vector3 newLocation = new Vector3();
-		newLocation.set(-64f / viewport.width, -1 + 32f / viewport.height, 0);
+		newLocation.set(-64f / viewport.width, -1 + 32f / viewport.height + ouyaBorder, 0);
 		newLocation.mul(engine.inverted);
 		font.setColor(player.getComponent(World.class).getColor());
 		font.draw(batch, "Current world:" + player.getComponent(World.class).name, newLocation.x, newLocation.y);

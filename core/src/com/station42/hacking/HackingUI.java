@@ -23,6 +23,7 @@ public class HackingUI implements EngineRenderer {
 	}
 	@Override
 	public void render(Engine engine, SpriteBatch batch, Rectangle viewport) {
+		float ouyaBorder = 0.05f;
 		Vector3 newLocation = new Vector3();
 		HackingAction hackingAction = player.getComponent(HackingAction.class);
 		if (hackingAction != null) {
@@ -31,17 +32,17 @@ public class HackingUI implements EngineRenderer {
 				EntitySprite sprite = targetEntity.getComponent(EntitySprite.class);
 				Hackable hackable = targetEntity.getComponent(Hackable.class);
 				if (sprite != null) {
-					newLocation.set(-1, -1 + (32f / viewport.height), 0);
+					newLocation.set(-1 + ouyaBorder, -1 + (32f / viewport.height) + ouyaBorder, 0);
 					newLocation.mul(engine.inverted);
 					batch.draw(sprite.getRegion(), newLocation.x, newLocation.y);
 				}
 				if (hackable != null) {
 					TextBounds bounds = font.getBounds(hackable.description);
-					newLocation.set(-1, -1 + (32f / viewport.height), 0);
+					newLocation.set(-1 + ouyaBorder, -1 + (32f / viewport.height) + ouyaBorder, 0);
 					newLocation.mul(engine.inverted);
 					font.draw(batch, hackable.description, newLocation.x, newLocation.y);
 					batch.end();
-					newLocation.set(-1 + (64f / viewport.width), -1 + (64f / viewport.height), 0);
+					newLocation.set(-1 + (64f / viewport.width) + ouyaBorder, -1 + (64f / viewport.height) + ouyaBorder, 0);
 					newLocation.mul(engine.inverted);
 					engine.shapeRenderer.begin(ShapeType.Filled);
 					engine.shapeRenderer.setColor(Color.WHITE);

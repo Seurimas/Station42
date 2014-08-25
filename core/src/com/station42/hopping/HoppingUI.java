@@ -25,16 +25,17 @@ public class HoppingUI implements EngineRenderer {
 	}
 	@Override
 	public void render(Engine engine, SpriteBatch batch, Rectangle viewport) {
+		float ouyaBorder = 0.05f;
 		String actionString = "Hop worlds";
 		Vector3 newLocation = new Vector3();
 		HoppingAction hackingAction = player.getComponent(HoppingAction.class);
 		if (hackingAction != null) {
 			TextBounds bounds = font.getBounds(actionString);
-			newLocation.set(1 - bounds.width * 2 / viewport.width, -1 + bounds.height * 2 / viewport.height, 0);
+			newLocation.set(1 - bounds.width * 2 / viewport.width - ouyaBorder, -1 + bounds.height * 2 / viewport.height + ouyaBorder, 0);
 			newLocation.mul(engine.inverted);
 			font.draw(batch, actionString, newLocation.x, newLocation.y);
 			batch.end();
-			newLocation.set(1, -1 + (64f / viewport.height), 0);
+			newLocation.set(1 - ouyaBorder, -1 + (64f / viewport.height) + ouyaBorder, 0);
 			newLocation.mul(engine.inverted);
 			engine.shapeRenderer.begin(ShapeType.Filled);
 			engine.shapeRenderer.setColor(Color.WHITE);

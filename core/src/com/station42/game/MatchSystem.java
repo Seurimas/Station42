@@ -67,6 +67,7 @@ public class MatchSystem implements EngineMessageListener, EngineRenderer,
 		int redCount = 0;
 		int blueCount = 0;
 		int whiteCount = 0;
+		float ouyaBorder = 0.05f * viewport.height;
 		for (Entity portal : engine.getEntitiesWithComponent(ScoringPortal.class)) {
 			EntityFaction faction = portal.getComponent(EntityFaction.class);
 			if (faction == EntityFaction.red)
@@ -79,26 +80,26 @@ public class MatchSystem implements EngineMessageListener, EngineRenderer,
 		batch.end();
 		engine.shapeRenderer.begin(ShapeType.Filled);
 		engine.shapeRenderer.setColor(Color.GRAY);
-		engine.shapeRenderer.rect(-35, viewport.height / 2 - 40, 70, 40);
+		engine.shapeRenderer.rect(-35, viewport.height / 2 - ouyaBorder - 40, 70, 40);
 		engine.shapeRenderer.end();
 		batch.begin();
 		if (winner == null) {
 			font.setColor(Color.RED);
-			font.draw(batch, "" + EntityFaction.red.getScore(), -30, viewport.height / 2);
+			font.draw(batch, "" + EntityFaction.red.getScore(), -30, viewport.height / 2 - ouyaBorder);
 			font.setColor(Color.BLUE);
-			font.draw(batch, "" + EntityFaction.blue.getScore(), 20, viewport.height / 2);
+			font.draw(batch, "" + EntityFaction.blue.getScore(), 20, viewport.height / 2 - ouyaBorder);
 			font.setColor(Color.WHITE);
-			font.draw(batch, "Portals", -20, viewport.height / 2 - 15);
+			font.draw(batch, "Portals", -20, viewport.height / 2 - 15 - ouyaBorder);
 			font.setColor(Color.BLACK);
-			font.draw(batch, "" + Gdx.graphics.getFramesPerSecond(), -viewport.width / 2, viewport.height / 2);
+//			font.draw(batch, "" + Gdx.graphics.getFramesPerSecond(), -viewport.width / 2, viewport.height / 2 - ouyaBorder);
 			for (int i = 0;i < whiteCount;i++) {
-				batch.draw(WHITE_DOT, (i * WHITE_DOT.getRegionWidth()) - (whiteCount * WHITE_DOT.getRegionWidth()) / 2, viewport.height / 2 - 40);
+				batch.draw(WHITE_DOT, (i * WHITE_DOT.getRegionWidth()) - (whiteCount * WHITE_DOT.getRegionWidth()) / 2, viewport.height / 2 - ouyaBorder - 40);
 			}
 			for (int i = 0;i < redCount;i++) {
-				batch.draw(RED_DOT, -(i * RED_DOT.getRegionWidth()) - ((whiteCount + 4) * WHITE_DOT.getRegionWidth()) / 2, viewport.height / 2 - 40);
+				batch.draw(RED_DOT, -(i * RED_DOT.getRegionWidth()) - ((whiteCount + 4) * WHITE_DOT.getRegionWidth()) / 2, viewport.height / 2 - ouyaBorder - 40);
 			}
 			for (int i = 0;i < blueCount;i++) {
-				batch.draw(BLUE_DOT, (i * BLUE_DOT.getRegionWidth()) + ((whiteCount + 2) * WHITE_DOT.getRegionWidth()) / 2, viewport.height / 2 - 40);
+				batch.draw(BLUE_DOT, (i * BLUE_DOT.getRegionWidth()) + ((whiteCount + 2) * WHITE_DOT.getRegionWidth()) / 2, viewport.height / 2 - ouyaBorder - 40);
 			}
 		} else {
 			font.setColor(winner.getColor());

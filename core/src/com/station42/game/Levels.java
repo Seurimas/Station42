@@ -57,7 +57,7 @@ public class Levels {
 			};
 		roomGrid[1] = new RoomTypes[][] {
 				new RoomTypes[] {Danger, Danger, Looting},
-				new RoomTypes[] {Danger, null, Danger},
+				new RoomTypes[] {Danger, Danger, Danger},
 				new RoomTypes[] {Looting, Danger, Spawning},
 			};
 	}
